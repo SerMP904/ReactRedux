@@ -19,7 +19,7 @@ const taskListPageReducer = (state = initialState, action) => {
         case TOGGLE_TAREA:
             return {
                 ...state,
-                tasks: state.tasks.map(t => t.id === action.payload.idTask ? true : false)
+                tasks: state.tasks.map(t => t.id === action.payload.idTask ? {...t, checked: !t.checked} : t)
             }
         default:
             return state;
