@@ -1,9 +1,8 @@
-import { FAVE_USER, LOAD_USERS, SELECT_USER } from './UsersComponentActions';
+import { FAVE_USER, LOAD_USERS, SELECT_USER, SHOW_FAVE_USER } from './UsersComponentActions';
 
 const initialState = {
   users: undefined,
   userSelected: undefined,
-  favorite: false,
 };
 
 const usersComponentReducer = (state = initialState, action) => {
@@ -18,22 +17,24 @@ const usersComponentReducer = (state = initialState, action) => {
         ...state,
         userSelected: action.payload.userData,
       };
-    case FAVE_USER:
-      if (action.payload.userData.favorite === false) {
-        action.payload.userData.favorite = true
-        console.log("true")
+      case FAVE_USER:
         return {
           ...state,
-          userFavorite: action.payload.userData
-        }
-      } else if (action.payload.userData.favorite === true) {
-        action.payload.userData.favorite = false
-        console.log("false")
+          users: state.users.map((user) =>
+            user.id === action.payload.userData.id
+              ? ({ ...user, favorite: !user.favorite })
+              : ({...user, favorite: user.favorite})
+          ),
+        };
+      case SHOW_FAVE_USER:
         return {
           ...state,
-          userFavorite: action.payload.userData
-        }
-      }
+          users: state.users.map((user) =>
+            user.favorite === true
+              ? ({ ...user})
+              : ("")
+          ),
+        };
     default:
       return state;
   }

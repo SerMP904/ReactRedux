@@ -1,7 +1,12 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../../core/services/usersFetch';
-import { faveUserAction, loadUsersAction, selectUserAction } from './UsersComponentActions';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../core/services/usersFetch";
+import {
+  faveUserAction,
+  loadUsersAction,
+  selectUserAction,
+  showFavUser,
+} from "./UsersComponentActions";
 
 const UsersComponent = () => {
   const dispatch = useDispatch();
@@ -25,15 +30,23 @@ const UsersComponent = () => {
     dispatch(selectUserAction(undefined));
   };
 
+  const resetAllUser = () =>{
+    
+  }
+
   const setFavoriteState = (userData) => {
-    dispatch(faveUserAction(userData))
-  } 
+    dispatch(faveUserAction(userData));
+  };
+
+  const showFavoriteUsers = (users) => {
+    dispatch(showFavUser(users))
+  }
 
   // Esta fucnion está accediendo al contenido obtenido del reducer del otro componente (mobileComponentReducer)
   const getInfoMobileById = (idMobile) => {
     const auxMobileData = mobiles.find((m) => m.id === idMobile);
     if (!auxMobileData) {
-      return ' no dispone de ningun movil.';
+      return " no dispone de ningun movil.";
     } else {
       return ` tiene el movil ${auxMobileData.brand} ${auxMobileData.model}.`;
     }
@@ -44,46 +57,49 @@ const UsersComponent = () => {
   }, []);
   return (
     <div>
-      
       {!users ? (
         <h2>Cargando datos...</h2>
       ) : (
         <div>
           <p>Número de usuarios: {users.length}</p>
-        {users.map((u, idx) => (
-          <div
-            key={idx}
-            style={{
-              display: 'flex',
-              gap: '50px',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              margin: '5px',
-            }}
-          >
-            <span>
-              {u.username} {u.password}
-            </span>
-            <button onClick={() => setFavoriteState(u)}>{userFavorite ? (<p>favorite</p>) : (<p>no favorite</p>)}</button>
-            <button onClick={() => selectUserHandler(u)}>Select</button>
-          </div>
-        ))}
+          <button onClick={resetAllUser}>Reset</button>
+          {users.map((u, idx) => (
+            <div
+              key={idx}
+              style={{
+                display: "flex",
+                gap: "50px",
+                alignItems: "center",
+                justifyContent: "space-between",
+                margin: "5px",
+              }}
+            >
+              <span>
+                {u.username} {u.password}
+              </span>
+              <button onClick={() => setFavoriteState(u)}>
+                {u.favorite ? "favorite" : "no favorite"}
+              </button>
+              <button onClick={() => selectUserHandler(u)}>Select</button>
+            </div>
+          ))}
         </div>
       )}
       <hr />
+      <button onClick={() => showFavoriteUsers(users)}>Show Favorites</button>
       {!userSelected ? (
         <h4>No se ha seleccionado ningún usuario</h4>
       ) : (
         <div
           style={{
-            display: 'flex',
-            gap: '15px',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            display: "flex",
+            gap: "15px",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <span>
-            El usuario {userSelected.username}{' '}          
+            El usuario {userSelected.username}{" "}
             {getInfoMobileById(userSelected.mobile)}
           </span>
           <button onClick={resetUserSelected}>Clear selected</button>
