@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../core/services/usersFetch';
-import { loadUsersAction, selectUserAction } from './UsersComponentActions';
+import { faveUserAction, loadUsersAction, selectUserAction } from './UsersComponentActions';
 
 const UsersComponent = () => {
   const dispatch = useDispatch();
-  const { users, userSelected } = useSelector(
+  const { users, userSelected, userFavorite } = useSelector(
     (state) => state.usersComponentReducer
   );
 
@@ -25,6 +25,10 @@ const UsersComponent = () => {
     dispatch(selectUserAction(undefined));
   };
 
+  const setFavoriteState = (userData) => {
+    dispatch(faveUserAction(userData))
+  } 
+
   // Esta fucnion está accediendo al contenido obtenido del reducer del otro componente (mobileComponentReducer)
   const getInfoMobileById = (idMobile) => {
     const auxMobileData = mobiles.find((m) => m.id === idMobile);
@@ -40,10 +44,13 @@ const UsersComponent = () => {
   }, []);
   return (
     <div>
+      
       {!users ? (
         <h2>Cargando datos...</h2>
       ) : (
-        users.map((u, idx) => (
+        <div>
+          <p>Número de usuarios: {users.length}</p>
+        {users.map((u, idx) => (
           <div
             key={idx}
             style={{
@@ -57,9 +64,11 @@ const UsersComponent = () => {
             <span>
               {u.username} {u.password}
             </span>
+            <button onClick={() => setFavoriteState(u)}>{userFavorite ? (<p>favorite</p>) : (<p>no favorite</p>)}</button>
             <button onClick={() => selectUserHandler(u)}>Select</button>
           </div>
-        ))
+        ))}
+        </div>
       )}
       <hr />
       {!userSelected ? (
@@ -74,7 +83,7 @@ const UsersComponent = () => {
           }}
         >
           <span>
-            El usuario {userSelected.username}{' '}
+            El usuario {userSelected.username}{' '}          
             {getInfoMobileById(userSelected.mobile)}
           </span>
           <button onClick={resetUserSelected}>Clear selected</button>

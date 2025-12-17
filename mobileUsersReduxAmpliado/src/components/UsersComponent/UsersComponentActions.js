@@ -1,5 +1,6 @@
 export const LOAD_USERS = 'LOAD_USERS';
 export const SELECT_USER = 'SELECT_USER';
+export const FAVE_USER = 'FAVE_USER'
 
 export const loadUsersAction = (usersData) => {
   return {
@@ -18,3 +19,12 @@ export const selectUserAction = (userData) => {
     },
   };
 };
+
+export const faveUserAction = (userData) => {
+  return {
+    type: FAVE_USER,
+    payload: {
+      userData,
+    }
+  }
+}

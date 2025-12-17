@@ -69,6 +69,7 @@ const MobileComponent = () => {
           )}
         </>
       )}
+      <hr />
     </div>
   );
 };
