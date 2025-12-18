@@ -32,6 +32,7 @@ const UsersComponent = () => {
 
   const resetAllUser = () =>{
     
+
   }
 
   const setFavoriteState = (userData) => {
